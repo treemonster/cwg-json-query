@@ -150,6 +150,7 @@ console.log(formatL.group([
 console.log(formatL.group(`$.m1.c,$.m2.c: x $!= 3`))
 */
 
+/*
 console.log(JSON.stringify(groupL(formatL.group([
   `$.m1.c: x $= 3`,
   `$.m2.c: x $= 3 || x $= 5`,
@@ -177,4 +178,45 @@ console.log(JSON.stringify(groupL(formatL.group([
     c: [{x: 5, y: 5}, {x: 5, y: 55}],
   }]
 })))
+*/
 
+cdata={
+  m1: [{
+    a: 1,
+    b: 1,
+    c: [{x: 1, y: 1}, {x: 1, y: 11}],
+  }, {
+    a: 2,
+    b: 2,
+    c: [{x: 2, y: 2}, {x: 2, y: 22}],
+  }, {
+    a: 3,
+    b: 3,
+    c: [{x: 3, y: 3}, {x: 3, y: 33}],
+  }],
+  m2: [{
+    a: 3,
+    b: 3,
+    c: [{x: 3, y: 3}, {x: 3, y: 33}],
+  }, {
+    a: 5,
+    b: 5,
+    c: [{x: 5, y: 5}, {x: 5, y: 55}],
+  }]
+}
+
+f={
+  filter: [
+    '$.m1.c,true: x $> 0 && y $< 10',
+    '$.m2,true: a $< 5',
+  ],
+  group: {
+    x0: [
+      `$.m1.c: x $= 3`,
+      `$.m2.c: x $= 3 || x $= 5`,
+    ], // 标准写法
+    x1: `$.m1.c,$.m2.c: x $!= 3`, // 简写
+  },
+}
+
+console.log(JSON.stringify(libsL(cdata, f), null, 2))

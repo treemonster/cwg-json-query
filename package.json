@@ -1,0 +1,18 @@
+{
+  "name": "cwg-json-query",
+  "version": "1.0.0",
+  "description": "a simple grouping and filtering tool for json data",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://127.0.0.1/git-repo/cwg-json-query"
+  },
+  "keywords": [
+    "json"
+  ],
+  "author": "treemonster",
+  "license": "ISC"
+}
