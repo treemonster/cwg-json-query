@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://127.0.0.1/git-repo/cwg-json-query"
+    "url": "https://github.com/treemonster/cwg-json-query.git"
   },
   "keywords": [
     "json"
