@@ -99,6 +99,7 @@ exp=`$.x.y,true: a $> -1 && (b $> 10 || b $< 6)`
 console.log(JSON.stringify(formatL.filter(exp), null, 2))
 */
 
+/*
 cdata={
   m1: [{
     a: 1,
@@ -134,5 +135,7 @@ f={
     x1: `$.m1.c,$.m2.c: x $!= 3`,
   },
 }
+*/
 
-console.log(JSON.stringify(libsL(cdata, f), null, 2))
+// console.log(JSON.stringify(libsL(cdata, f), null, 2))
+console.log(formatL.group(`$.m1.c,$.m2.c: x $!= 3`))

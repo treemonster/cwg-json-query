@@ -27,11 +27,18 @@ function s_rule(str) {
         s.push(d)
         i++
         break
-      case ['$>', '$=', '$<', '$!', '$<=', '$>=', '$$'].includes(d):
+
+      case ['$>', '$=', '$<', '$$'].includes(d):
         i+=d.length-1
         s.push([t, d])
         t=''
         break
+      case ['$!=', '$<=', '$>='].includes(e):
+        i+=e.length-1
+        s.push([t, e])
+        t=''
+        break
+
       default:
         t+=c
         break
@@ -69,6 +76,28 @@ filter={
   ],
 }
 
-exp=`$.x.y,true: $.a $> -1 && ($.b $> 10 || $.b $< 6)`
+exp=`$.x.y,true: a $> -1 && (b $> 10 || b $< 6)`
 
+*/
+
+
+exports.group=exp=>{
+  let group={}, _str
+  exp.replace(/(^[^:]+)\s*\:\s*([\s\S]+)/ig, (_, rows, str)=>{
+    group={
+      rows: rows.split(',').map(a=>a.trim()),
+      rule: s_rule(str)
+    }
+  })
+  return group
+}
+
+// $.m1.c,$.m2.c: x $!= 3
+/*
+  {
+    rows: ['$.m1.c', '$.m2.c'],
+    rule: [
+      ['x', '$!=', 3],
+    ]
+  }
 */
