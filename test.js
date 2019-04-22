@@ -224,4 +224,4 @@ f={
   ],
 }
 
-console.log(JSON.stringify(libsL(cdata, f), null, 2))
+console.log(JSON.stringify(libsL(cdata).filter(f.filter).group(f.group).remove(f.remove), null, 2))

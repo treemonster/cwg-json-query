@@ -42,9 +42,13 @@ f={
     ], // 标准写法
     x1: `$.m1.c,$.m2.c: x $!= 3`, // 简写
   },
+  remove: [
+    '$.m1.c.y',
+    '$.x1.y',
+  ],
 }
 
-console.log(JSON.stringify(libsL(cdata, f), null, 2))
+console.log(JSON.stringify(libsL(cdata).filter(f.filter).group(f.group).remove(f.remove), null, 2))
 
 ```
 
@@ -58,8 +62,7 @@ console.log(JSON.stringify(libsL(cdata, f), null, 2))
         "b": 1,
         "c": [
           {
-            "x": 1,
-            "y": 11
+            "x": 1
           }
         ]
       },
@@ -68,8 +71,7 @@ console.log(JSON.stringify(libsL(cdata, f), null, 2))
         "b": 2,
         "c": [
           {
-            "x": 2,
-            "y": 22
+            "x": 2
           }
         ]
       },
@@ -78,8 +80,7 @@ console.log(JSON.stringify(libsL(cdata, f), null, 2))
         "b": 3,
         "c": [
           {
-            "x": 3,
-            "y": 33
+            "x": 3
           }
         ]
       }
@@ -99,22 +100,8 @@ console.log(JSON.stringify(libsL(cdata, f), null, 2))
           }
         ]
       }
-    ]
-  },
-  "group": {
+    ],
     "x0": [
-      {
-        "x": 3,
-        "y": 3
-      },
-      {
-        "x": 3,
-        "y": 33
-      },
-      {
-        "x": 3,
-        "y": 3
-      },
       {
         "x": 3,
         "y": 33
@@ -130,30 +117,19 @@ console.log(JSON.stringify(libsL(cdata, f), null, 2))
     ],
     "x1": [
       {
-        "x": 1,
-        "y": 1
+        "x": 1
       },
       {
-        "x": 1,
-        "y": 11
+        "x": 2
       },
       {
-        "x": 2,
-        "y": 2
+        "x": 5
       },
       {
-        "x": 2,
-        "y": 22
-      },
-      {
-        "x": 5,
-        "y": 5
-      },
-      {
-        "x": 5,
-        "y": 55
+        "x": 5
       }
     ]
   }
 }
+
 ```
