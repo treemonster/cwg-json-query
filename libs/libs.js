@@ -56,6 +56,20 @@ function flatten_data(vars, data, filter_key, key='$') {
   }
 }
 
+// 遍历json
+function walk_json(cdata, fn, key='$') {
+  if(Array.isArray(cdata)) {
+    cdata.map(d=>walk_json(d, fn, key))
+  }else {
+    fn(cdata, key)
+    for(let k in cdata) {
+      let d=cdata[k]
+      if(Array.isArray(d) || typeof d==='object')
+        walk_json(d, fn, key+'.'+k)
+    }
+  }
+}
+
 // 代入运算
 function sub_obj_rule(vars, filter) {
   let {key, rule}=filter
@@ -124,4 +138,5 @@ module.exports={
   sub_obj_rule,
   clone_json,
   filter_json,
+  walk_json,
 }

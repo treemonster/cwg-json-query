@@ -1,6 +1,7 @@
 const filterL=require('./libs/filter')
 const formatL=require('./libs/format')
 const groupL=require('./libs/group')
+const removeL=require('./libs/remove')
 const libsL=require('./libs')
 
 let filter, cdata, exp
@@ -217,6 +218,10 @@ f={
     ], // 标准写法
     x1: `$.m1.c,$.m2.c: x $!= 3`, // 简写
   },
+  remove: [
+    '$.m1.c.y',
+    '$.x1.y',
+  ],
 }
 
 console.log(JSON.stringify(libsL(cdata, f), null, 2))

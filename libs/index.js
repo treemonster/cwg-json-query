@@ -1,9 +1,10 @@
 const formatL=require('./format')
 const filterL=require('./filter')
 const groupL=require('./group')
+const removeL=require('./remove')
 const {clone_json}=require('./libs')
 
-module.exports=(data, {filter, group})=>{
+module.exports=(data, {filter, group, remove})=>{
 
   let cdata=clone_json(data)
   ; (filter||[]).map(f=>{
@@ -11,7 +12,10 @@ module.exports=(data, {filter, group})=>{
   })
 
   let _group={}
-  for(let g in group) _group[g]=groupL(formatL.group(group[g]), clone_json(data))
+  if(group) for(let g in group) _group[g]=groupL(formatL.group(group[g]), clone_json(data))
 
-  return {data: cdata, group: _group}
+  let res=Object.assign(cdata, _group)
+  if(remove) res=removeL(remove, res)
+
+  return res
 }
