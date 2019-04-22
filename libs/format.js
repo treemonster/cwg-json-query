@@ -82,22 +82,40 @@ exp=`$.x.y,true: a $> -1 && (b $> 10 || b $< 6)`
 
 
 exports.group=exp=>{
-  let group={}, _str
-  exp.replace(/(^[^:]+)\s*\:\s*([\s\S]+)/ig, (_, rows, str)=>{
-    group={
-      rows: rows.split(',').map(a=>a.trim()),
-      rule: s_rule(str)
-    }
-  })
+  if(exp+''===exp) exp=[exp]
+  let group={}
+  exp.map(e=>e.replace(/(^[^:]+)\s*\:\s*([\s\S]+)/ig, (_, rows, str)=>{
+    rows.split(',').map(a=>{
+      a=a.trim()
+      group[a]=group[a]||[]
+      group[a].push(str)
+    })
+  }))
+  for(let x in group) {
+    group[x]='('+group[x].join(') || (')+')'
+  }
   return group
 }
 
-// $.m1.c,$.m2.c: x $!= 3
-/*
-  {
-    rows: ['$.m1.c', '$.m2.c'],
-    rule: [
-      ['x', '$!=', 3],
+/* 
+    [
+      `$.m1.c: x $= 3`,
+      `$.m2.c: x $= 3 || x $= 5`,
     ]
+
+  {
+    '$.m1.c': ['x', '$=', 3],
+    '$.m2.c': [
+      ['x', '$=', 3],
+      '||',
+      ['x', '$=', 5],
+    ]
+  }
+
+  $.m1.c,$.m2.c: x $!= 3
+
+  {
+    '$.m1.c': ['x', '$!=', 3],
+    '$.m2.c': ['x', '$!=', 3],
   }
 */

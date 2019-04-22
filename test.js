@@ -131,11 +131,20 @@ f={
     '$.m2,true: a $< 5',
   ],
   group: {
-    x0: `$.m1.c,$.m2.c: x $= 3`,
-    x1: `$.m1.c,$.m2.c: x $!= 3`,
+    x0: [
+      `$.m1.c: x $= 3`,
+      `$.m2.c: x $= 3 || x $= 5`,
+    ], // 标准写法
+    x1: `$.m1.c,$.m2.c: x $!= 3`, // 简写
   },
 }
 */
 
 // console.log(JSON.stringify(libsL(cdata, f), null, 2))
+console.log(formatL.group([
+  `$.m1.c: x $= 3`,
+  `$.m2.c: x $= 3 || x $= 5`,
+]))
 console.log(formatL.group(`$.m1.c,$.m2.c: x $!= 3`))
+
+
