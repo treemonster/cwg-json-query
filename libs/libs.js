@@ -80,7 +80,7 @@ function sub_obj_rule(vars, filter) {
         if(Array.isArray(any) || (typeof any).match(/string|number|boolean/) || any===null) {
           _str=any+''
         }else _str=JSON.stringify(any)
-        return _str.match(_reg)
+        return !!_str.match(_reg)
       })(v)
     }
   })
