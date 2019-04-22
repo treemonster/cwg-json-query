@@ -91,10 +91,9 @@ exports.group=exp=>{
       group[a].push(str)
     })
   }))
-  for(let x in group) {
-    group[x]='('+group[x].join(') || (')+')'
-  }
-  return group
+  return Object.keys(group).map(x=>{
+    return this.filter(x+',0:'+'('+group[x].join(') || (')+')')
+  })
 }
 
 /* 
