@@ -51,10 +51,10 @@ function s_rule(str) {
 
 exports.filter=exp=>{
   let filter={}, _str
-  exp.replace(/(^.*?)\s*\,\s*(true|false|yes|no|1|0)\s*\:\s*([\s\S]+)/ig, (_, key, match_remove, str)=>{
+  exp.replace(/(^.*?)\s*(?:\,\s*(true|false|yes|no|1|0)){0,1}\s*\:\s*([\s\S]+)/ig, (_, key, match_remove, str)=>{
     filter={
       key,
-      match_remove: !!match_remove.match(/true|yes|1/i),
+      match_remove: match_remove? !!match_remove.match(/true|yes|1/i): false,
       rule: s_rule(str)
     }
   })

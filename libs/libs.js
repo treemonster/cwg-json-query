@@ -98,11 +98,21 @@ function sub_obj_rule(vars, filter) {
       })(v)
     }
   })
-  let p=JSON.stringify(rr(_rule))
-  for(let a='[]",', b='()  ', i=0; i<a.length; i++) {
-    p=p.replace(new RegExp('\\'+a.charAt(i), 'g'), b.charAt(i))
+  return _calc(rr(_rule))
+}
+
+function _calc(arr_exp) {
+  if((typeof arr_exp).match(/boolean|string/)) return arr_exp
+  let res=[]
+  while(arr_exp.length) {
+  	let e=arr_exp.shift(), o=res[res.length-1]
+    if(o==='&&' || o==='||') {
+      res.pop()
+      let x=res.pop(), y=_calc(e)
+      res.push(o==='&&'? x && y: x || y)
+    }else res.push(_calc(e))
   }
-  return !!eval(p)
+  return res[0]
 }
 
 function clone_json(data) {
