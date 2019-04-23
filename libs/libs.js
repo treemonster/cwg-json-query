@@ -131,6 +131,7 @@ function filter_json(filter, cdata) {
   for(let i=0; i<L_vars.length; i++) {
     let v=L_vars[i], r=sub_obj_rule(v, filter)
     if(filter.match_remove? !r: r) continue
+    if(!v[filter.key]) continue
     for(let j=0; j<v[filter.key].length; j++) {
       if(v[filter.key][j] !== v.$item) continue
       v[filter.key].splice(j, 1)
@@ -141,6 +142,22 @@ function filter_json(filter, cdata) {
   return {cdata, L_vars, vars}
 }
 
+function rule_fix(rule, fix_left) {
+  for(let i=0; i<rule.length; i++) {
+    let r=rule[i]
+    if(Array.isArray(r)) {
+      rule[i]=rule_fix(r, fix_left)
+      continue
+    }else if(r!=='&&' || r!== '||') continue
+    else {
+      if(fix_left) {
+        rule[i-1]=rule[i+1]
+        rule[i+1]=0
+      }else rule[i+1]=0
+    }
+  }
+  return rule
+}
 
 module.exports={
   get_filter_vars,
@@ -149,4 +166,5 @@ module.exports={
   clone_json,
   filter_json,
   walk_json,
+  rule_fix,
 }

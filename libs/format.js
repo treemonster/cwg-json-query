@@ -118,3 +118,28 @@ exports.group=exp=>{
     '$.m2.c': ['x', '$!=', 3],
   }
 */
+
+exports.padding=exp=>{
+  let res={}
+  let [cp, pad, f]=exp.split(':')
+  let [c, p]=cp.split(',').map(a=>a.trim())
+  return {
+    c, p: p.replace(/^\$p/, '$'),
+    p2c: pad.split(',').map(s=>s.split('<=').map(a=>a.trim()).reverse()),
+    cp: s_rule(f),
+  }
+}
+
+/*
+ $.m1, $p.m1 : o <= o, p <= o.p, sx <= s.x : a $= f.a || b $= f.b
+ {
+  c: '$.m1',
+  p: '$.m1', // 此处需要把 $p 换成 $
+  p2c: [['o', 'o'], ['o.p', 'p'], ['s.x', 'sx']],
+  cp: [
+    ['a', '$=', 'f.a'],
+    '||',
+    ['b', '$=', 'f.b'],
+  ],
+ }
+ */

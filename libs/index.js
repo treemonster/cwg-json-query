@@ -2,6 +2,7 @@ const formatL=require('./format')
 const filterL=require('./filter')
 const groupL=require('./group')
 const removeL=require('./remove')
+const paddingL=require('./padding')
 
 module.exports=(data)=>{
   let fn={
@@ -21,6 +22,12 @@ module.exports=(data)=>{
       data=removeL(remove, data)
       return {...fn, data}
     },
+    padding: (pdata, padding)=>{
+      padding.map(f=>{
+        data=paddingL(formatL.padding(f), data, pdata)
+      })
+      return {...fn, data}
+    }
   }
   return fn
 }

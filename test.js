@@ -206,24 +206,41 @@ cdata={
   }]
 }
 
-f={
-  // 符合条件的保留
-  // 等价于 $.xx,false: ....
-  filter: [
+pdata={
+  m1: [{
+    f: {a: 1, b: 1},
+    o: {q: 11, w: 22, e: 33},
+    s: [{x: 111}, {x: 1110}],
+  }, {
+    f: {a: 0, b: 2},
+    o: {q: 55, w: 66, e: 77},
+    s: [{x: 222}, {x: 2220}],
+  }, {
+    f: {a: 3, b: 3},
+    o: {q: 88, w: 99, e: 122},
+    s: [{x: 333}, {x: 3330}],
+  }, ],
+}
+  
+console.log(JSON.stringify(
+  libsL(cdata).padding(pdata, [
+  	// 选择元素 : 填充规则 : 选取规则
+  	// 以下语句表示：选取$.m1和$p.m1这两个元素作为操作数，当这两个操作数下的a相等或者b相等时，把$p.m1的o，p，和s.x分别填充给$.m1
+  	// 此处判断条件中的元素必须是一对一比较，不可以数组比较，即此处的a、b、f.a、f.b、f 都不可以是数组，否则逻辑上会产生歧义
+  	'$.m1, $p.m1 : o <= o, p <= o.p, sx <= s.x : a $= f.a || b $= f.b'
+  ]).filter([
+    // 符合条件的保留
+    // 等价于 $.xx,false: ....
     '$.m1.c: x $> 0 && y $< 10',
     '$.m2: a $< 5',
-  ],
-  group: {
+  ]).group({
     x0: [
       `$.m1.c: x $= 3`,
       `$.m2.c: x $= 3 || x $= 5`,
     ], // 标准写法
     x1: `$.m1.c,$.m2.c: x $!= 3`, // 简写
-  },
-  remove: [
+  }).remove([
     '$.m1.c.y',
     '$.x1.y',
-  ],
-}
-
-console.log(JSON.stringify(libsL(cdata).filter(f.filter).group(f.group).remove(f.remove), null, 2))
+  ]),
+null, 2))
