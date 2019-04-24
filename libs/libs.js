@@ -66,18 +66,20 @@ function walk_json(cdata, fn, key='$') {
       let d=cdata[k]
       if(Array.isArray(d) || typeof d==='object')
         walk_json(d, fn, key+'.'+k)
+      else fn(d, key+'.'+k)
     }
   }
 }
 
 // 代入运算
-function sub_obj_rule(vars, filter) {
+function sub_obj_rule(vars, filter, is_e_var) {
   let {key, rule}=filter
   let _rule=JSON.parse(JSON.stringify(rule))
   let rr=r=>r.map(t=>{
     if(t+'' === t) return t
     if(Array.isArray(t[0])) return rr(t)
     let v=vars[key+'.'+t[0]], e=t[2]
+    if(is_e_var) e=vars[key+'.'+e]
     if(v===undefined) return false
     switch(t[1]) {
       case '$>': return v>e
@@ -142,19 +144,20 @@ function filter_json(filter, cdata) {
   return {cdata, L_vars, vars}
 }
 
-function rule_fix(rule, fix_left) {
+function rule_fix(rule, fix_left, fix_pre) {
   for(let i=0; i<rule.length; i++) {
     let r=rule[i]
-    if(Array.isArray(r)) {
-      rule[i]=rule_fix(r, fix_left)
-      continue
-    }else if(r!=='&&' || r!== '||') continue
-    else {
-      if(fix_left) {
-        rule[i-1]=rule[i+1]
-        rule[i+1]=0
-      }else rule[i+1]=0
-    }
+    if(['$>', '$=', '$<', '$!=', '$<=', '$>=', '$$'].includes(r)) {
+      if(fix_pre) {
+        if(fix_left) rule[i-1]=fix_pre+rule[i-1]
+        else rule[i+1]=fix_pre+rule[i+1]
+      }else {
+        if(fix_left) {
+          rule[i-1]=rule[i+1]
+          rule[i+1]=0
+        }else rule[i+1]=0
+      }
+    }else if(Array.isArray(r)) rule[i]=rule_fix(r, fix_left, fix_pre)
   }
   return rule
 }
