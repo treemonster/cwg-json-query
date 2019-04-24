@@ -221,7 +221,7 @@ pdata={
     s: [{x: 333}, {x: 3330}],
   }, ],
 }
-  
+
 console.log(JSON.stringify(
   libsL(cdata).padding(pdata, [
   	// 选择元素 : 填充规则 : 选取规则
